@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-mysql
+  labels: 
+    project: php-demo
+    app: mysql
+spec:
+  ports:
+  - port: 3306 
+    name: mysql 
+  clusterIP: None
+  selector:
+    project: php-demo
+    app: mysql
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db
+spec:
+  selector:
+    matchLabels:
+      project: php-demo
+      app: mysql
+  serviceName: "mysql"
+  template:
+    metadata:
+      labels:
+        project: php-demo
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.7 
+        ports: 
+        - containerPort: 3306
+        env: 
+        - name: MYSQL_ROOT_PASSWORD
+          value: "123456"
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: data
+  volumeClaimTemplates:
+  - metadata:
+      name: data 
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "managed-nfs-storage"
+      resources:
+        requests:
+          storage: 2Gi 
