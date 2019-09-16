@@ -1,5 +1,2 @@
-<<<<<<< HEAD
-“#test-demo”
 =======
-＃创建一个PHP-demo
->>>>>>> 41c407ec4239b720f065b7a2347caf52fe295acf
+# 在k8s平台上搭建一个php网站示例，使用wordpress搭建一个个人博客
